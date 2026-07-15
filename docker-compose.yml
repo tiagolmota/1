@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - iagen_logs:/app/backend/logs
+    environment:
+      - LLAMA_MODEL_PATH=/models/model-q4_k_m.gguf # Example env var for local model
+      - OMP_NUM_THREADS=4 # CPU optimization for Ryzen 7
+    restart: always
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  iagen_logs:
+    name: iagen_persistent_logs

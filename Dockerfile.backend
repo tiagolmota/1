@@ -1,0 +1,22 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Required system dependencies for llama-cpp-python (and building it)
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    cmake \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install python requirements (would normally copy requirements.txt here)
+RUN pip install --no-cache-dir fastapi uvicorn pydantic llama-cpp-python starlette
+
+COPY ./backend /app/backend
+
+# Create logs directory
+RUN mkdir -p /app/backend/logs
+# Expose the API port
+EXPOSE 8000
+
+ENV PYTHONPATH=/app
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
