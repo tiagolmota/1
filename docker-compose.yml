@@ -1,0 +1,41 @@
+# Passo 1: Definir a infraestrutura base utilizando Docker Compose para assegurar portabilidade
+# A portabilidade é crucial para a arquitetura híbrida de contingência no servidor de agrupamento.
+version: '3.8'
+
+services:
+  # Passo 2: Configurar o motor Ollama como o cérebro da inferência local
+  ollama_engine:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      # O volume garante que o modelo quantizado não é transferido a cada reinício
+      - ollama_models:/root/.ollama
+    environment:
+      # Forçar a execução apenas no processador lógico (CPU)
+      - OLLAMA_HOST=0.0.0.0
+    restart: unless-stopped
+
+  # Passo 3: Implementar a API FastAPI que atua como porta-voz e auditor do sistema
+  audit_backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - ollama_engine
+    volumes:
+      # Diretório intocável pelo frontend, exclusivo para geração do log JSON auditável
+      - ./logs:/app/logs
+    environment:
+      - OLLAMA_URL=http://ollama_engine:11434
+
+  # Passo 4: Servir o Frontend construído em Vue.js 3 e TypeScript
+  vue_frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - audit_backend
+
+volumes:
+  ollama_models:
