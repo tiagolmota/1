@@ -58,7 +58,7 @@ const sendMessage = async () => {
   try {
     const chatHistory = [
       { role: "system", content: systemPrompt },
-      ...messages.value.map(msg => ({ role: msg.role, content: msg.content }))
+      ...messages.value
     ]
 
     const reply = await engine.chat.completions.create({
