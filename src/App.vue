@@ -173,6 +173,7 @@ const sendMessage = async () => {
               placeholder="Digite sua dúvida aqui..."
               class="flex-1 px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all shadow-inner"
               :disabled="isLoading"
+              maxlength="1000"
             />
             <button
               type="submit"
