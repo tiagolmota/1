@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, nextTick } from 'vue'
 import { CreateMLCEngine } from '@mlc-ai/web-llm'
 
 const messages = ref([])
