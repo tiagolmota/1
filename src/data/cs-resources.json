@@ -1,0 +1,88 @@
+{
+  "source": "https://github.com/the-akira/Computer-Science-Resources",
+  "categories": [
+    {
+      "name": "Getting Started",
+      "resources": [
+        { "title": "Map of Computer Science", "url": "https://www.youtube.com/watch?v=SzJ46YA_RaA" },
+        { "title": "Map of Mathematics", "url": "https://www.youtube.com/watch?v=OmJ-4B-mS-Y" },
+        { "title": "Map of Physics", "url": "https://www.youtube.com/watch?v=ZihywtixUYo&t" },
+        { "title": "MIT Courses", "url": "https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/" },
+        { "title": "MIT 6.00 Intro to Computer Science & Programming", "url": "https://www.youtube.com/watch?v=k6U-i4gXkLM&list=PL4C4720A6F225E074" },
+        { "title": "MIT 6.0001 Introduction to Computer Science & Programming in Python", "url": "https://www.youtube.com/playlist?list=PLUl4u3cNGP63WbdFxL8giv4yhgdMGaZNA" },
+        { "title": "MIT 6.0002 Introduction to Computational Thinking and Data Science", "url": "https://www.youtube.com/playlist?list=PLUl4u3cNGP619EG1wp0kT-7rDE_Az5TNd" },
+        { "title": "CS50 Harvard", "url": "https://www.youtube.com/watch?v=y62zj9ozPOM&list=PLhQjrBD2T3828ZVcVzEIhsHVgjANGZveu" },
+        { "title": "Audio/Video Courses from Colleges and Universities", "url": "http://www.infocobuild.com/education/audio-video-courses/" },
+        { "title": "Everything Computer Science", "url": "https://everythingcomputerscience.com/" },
+        { "title": "Computer Science Roadmap", "url": "https://roadmap.sh/computer-science" }
+      ]
+    },
+    {
+      "name": "Computer Fundamentals",
+      "resources": [
+        { "title": "Algorithms & Data Structures", "url": "https://github.com/the-akira/Computer-Science-Resources/blob/master/db/algorithms_data_structures.md" },
+        { "title": "Computer Architecture", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/computer_architecture.md" },
+        { "title": "Operating Systems", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/operating_systems.md" },
+        { "title": "Mathematics", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/mathematics.md" },
+        { "title": "Regular Expressions", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/regular_expressions.md" },
+        { "title": "Physics", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/physics.md" },
+        { "title": "Signals and Systems", "url": "https://github.com/the-akira/Computer_Science_Web_Resources/blob/master/db/signals_systems.md" },
+        { "title": "Information Theory", "url": "https://github.com/the-akira/Computer-Science-Resources/blob/master/db/information_theory.md" },
+        { "title": "Cloud Computing", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/cloud_computing.md" },
+        { "title": "Quantum Computing", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/quantum_computing.md" },
+        { "title": "Computer Networks", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/computer_networks.md" },
+        { "title": "Computer Graphics", "url": "https://github.com/the-akira/Computer_Science_Web_Resources/blob/master/db/computer_graphics.md" },
+        { "title": "Virtual Reality", "url": "https://github.com/the-akira/Computer_Science_Web_Resources/blob/master/db/virtual_reality.md" }
+      ]
+    },
+    {
+      "name": "Programming Languages",
+      "resources": [
+        { "title": "Assembly", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/assembly.md" },
+        { "title": "C", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/c.md" },
+        { "title": "C++", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/cpp.md" },
+        { "title": "Python", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/python.md" },
+        { "title": "Java", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/java.md" },
+        { "title": "Javascript", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/javascript.md" },
+        { "title": "Ruby", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/ruby.md" },
+        { "title": "Bash", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/bash.md" },
+        { "title": "Go", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/go.md" },
+        { "title": "PHP", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/php.md" },
+        { "title": "Haskell", "url": "https://github.com/the-akira/Computer_Science_Web_Resources/blob/master/db/haskell.md" },
+        { "title": "R", "url": "https://github.com/the-akira/Computer_Science_Web_Resources/blob/master/db/r.md" },
+        { "title": "Julia", "url": "https://github.com/the-akira/Computer_Science_Web_Resources/blob/master/db/julia.md" },
+        { "title": "Elixir", "url": "https://github.com/the-akira/Computer_Science_Web_Resources/blob/master/db/elixir.md" }
+      ]
+    },
+    {
+      "name": "Artificial Intelligence",
+      "resources": [
+        { "title": "Machine Learning", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/machine_learning.md" },
+        { "title": "Artificial Neural Networks", "url": "https://github.com/the-akira/Computer_Science_Web_Resources/blob/master/db/artificial_neural_network.md" },
+        { "title": "Natural Language Processing", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/natural_language_processing.md" },
+        { "title": "Computer Vision", "url": "https://github.com/the-akira/Computer_Science_Web_Resources/blob/master/db/computer_vision.md" },
+        { "title": "Cybernetics & Robotics", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/cybernetics_and_robotics.md" }
+      ]
+    },
+    {
+      "name": "Information Security",
+      "resources": [
+        { "title": "Computer Security", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/cyber_security.md" },
+        { "title": "Web Hacking", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/web_hacking.md" },
+        { "title": "Exploits", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/exploits.md" },
+        { "title": "Reverse Engineering", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/reverse_engineering.md" },
+        { "title": "Social Engineering", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/social_engineering.md" },
+        { "title": "Cryptography", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/cryptography.md" }
+      ]
+    },
+    {
+      "name": "Databases",
+      "resources": [
+        { "title": "SQL", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/sql.md" },
+        { "title": "NoSQL", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/nosql.md" },
+        { "title": "Big Data", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/big_data.md" },
+        { "title": "Data Mining", "url": "https://github.com/the-akira/computer_science_web_resources/blob/master/db/data_mining.md" }
+      ]
+    }
+  ]
+}
