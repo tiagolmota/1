@@ -1,9 +1,11 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue'
 import { CreateMLCEngine } from '@mlc-ai/web-llm'
-import ProjectExplorer from './components/ProjectExplorer.vue'
+import KnowledgeExplorer from './components/KnowledgeExplorer.vue'
 import byoxCatalog from './data/byox-catalog.json'
+import awesomeCatalog from './data/awesome-catalog.json'
 import { findTutorials, buildContext, missingLanguages } from './knowledge/byox.js'
+import { findLists, buildContext as buildListsContext, displayName } from './knowledge/awesome.js'
 
 const messages = ref([])
 const inputMessage = ref('')
@@ -58,7 +60,12 @@ const sendMessage = async () => {
   // O modelo recebe só títulos (sem links) e a interface mostra os links
   // verdadeiros, para que nenhum URL apresentado ao aluno seja inventado.
   const tutorials = findTutorials(byoxCatalog, userText)
-  const knowledge = buildContext(tutorials, userText)
+  // As listas "awesome" respondem a pedidos de recursos ("onde aprendo X?"),
+  // não de projetos; as duas pesquisas são independentes e podem somar-se.
+  const lists = findLists(awesomeCatalog, userText)
+  const knowledge = [buildContext(tutorials, userText), buildListsContext(lists)]
+    .filter(Boolean)
+    .join('\n\n')
   messages.value.push({ role: 'user', content: userText })
   inputMessage.value = ''
   isLoading.value = true
@@ -84,6 +91,7 @@ const sendMessage = async () => {
       // para que cada resposta mostre os tutoriais que a fundamentaram.
       tutorials,
       missing: missingLanguages(tutorials, userText),
+      lists,
     })
     await scrollToBottom()
   } catch (error) {
@@ -126,7 +134,7 @@ const askFromExplorer = async (text) => {
           @click="showExplorer = !showExplorer"
           class="px-4 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-full shadow-sm flex items-center gap-1 transition-colors"
         >
-          🛠️ {{ showExplorer ? 'Voltar ao chat' : 'Ideias de projetos' }}
+          🛠️ {{ showExplorer ? 'Voltar ao chat' : 'Ideias e recursos' }}
         </button>
       </div>
     </header>
@@ -134,8 +142,8 @@ const askFromExplorer = async (text) => {
     <!-- Main App Area -->
     <main class="w-full max-w-3xl bg-white rounded-3xl shadow-2xl border border-indigo-100 overflow-hidden flex flex-col h-[70vh] min-h-[500px]">
 
-      <!-- Project Explorer (catálogo build-your-own-x) -->
-      <ProjectExplorer v-if="showExplorer" @ask="askFromExplorer" />
+      <!-- Explorador das bases de conhecimento (build-your-own-x e awesome) -->
+      <KnowledgeExplorer v-if="showExplorer" @ask="askFromExplorer" />
 
       <!-- Welcome / Load Screen -->
       <div v-else-if="!isModelLoaded" class="flex-1 flex flex-col items-center justify-center p-8 text-center bg-gradient-to-b from-white to-indigo-50">
@@ -197,6 +205,17 @@ const askFromExplorer = async (text) => {
                   </p>
                   <p class="text-[11px] text-slate-400">Fonte: build-your-own-x (links externos, em inglês).</p>
                 </div>
+
+                <!-- Listas "awesome" usadas nesta resposta; letras A, B, C como no contexto do modelo -->
+                <div v-if="msg.lists?.length" class="mt-4 pt-3 border-t border-slate-100 space-y-2">
+                  <p class="text-xs font-semibold text-slate-500">Listas de recursos:</p>
+                  <a v-for="(l, i) in msg.lists" :key="l.url" :href="l.url" target="_blank" rel="noopener noreferrer"
+                     class="block px-3 py-2 bg-emerald-50 hover:bg-emerald-100 rounded-xl text-sm transition-colors">
+                    <span class="font-medium text-emerald-900">{{ String.fromCharCode(65 + i) }}. {{ displayName(l) }}</span>
+                    <span v-if="l.description" class="block text-xs text-emerald-700">{{ l.description }}</span>
+                  </a>
+                  <p class="text-[11px] text-slate-400">Fonte: sindresorhus/awesome (links externos, em inglês).</p>
+                </div>
               </div>
             </div>
 
@@ -222,7 +241,7 @@ const askFromExplorer = async (text) => {
               v-model="inputMessage"
               type="text"
               placeholder="Digite sua dúvida aqui..."
-              class="flex-1 px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all shadow-inner"
+              class="flex-1 min-w-0 px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all shadow-inner"
               :disabled="isLoading"
             />
             <button

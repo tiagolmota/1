@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "node --test 'tests/*.test.mjs'",
-    "catalog": "node scripts/build-byox-catalog.mjs"
+    "catalog": "node scripts/build-byox-catalog.mjs",
+    "catalog:awesome": "node scripts/build-awesome-catalog.mjs"
   },
   "dependencies": {
     "@mlc-ai/web-llm": "^0.2.84",

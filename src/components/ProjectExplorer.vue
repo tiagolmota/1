@@ -38,10 +38,10 @@ function askAbout() {
 
 <template>
   <div class="flex-1 flex flex-col overflow-hidden">
-    <!-- O botão para voltar ao chat está no cabeçalho da página; repeti-lo
-         aqui roubaria espaço à lista, que já é curta em ecrãs de telemóvel. -->
+    <!-- O título está no separador (KnowledgeExplorer) e o botão para voltar
+         ao chat no cabeçalho da página; repeti-los aqui roubaria espaço à
+         lista, que já é curta em ecrãs de telemóvel. -->
     <div class="px-4 sm:px-6 py-3 border-b border-slate-100">
-      <h2 class="text-lg sm:text-xl font-bold text-indigo-900">Construir do zero</h2>
       <p class="text-xs sm:text-sm text-slate-500">
         {{ catalog.count }} tutoriais (links externos, em inglês) do catálogo
         <a :href="catalog.source.repository" target="_blank" rel="noopener noreferrer" class="underline">build-your-own-x</a>,

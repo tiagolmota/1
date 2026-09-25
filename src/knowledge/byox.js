@@ -9,6 +9,11 @@
 // As funções recebem o catálogo como argumento (em vez de o importarem) para
 // poderem ser testadas em Node sem passar pelo bundler.
 
+import { normalize, tokenize } from './text.js'
+
+// Reexportadas para manter a API pública deste módulo.
+export { normalize, tokenize }
+
 // Sinónimos por categoria. Palavras genéricas partilhadas por vários temas
 // ("motor", "web") ficam de fora: empatariam temas distintos, como "motor de
 // física" e "motor de templates", ou "navegador web" e "servidor web".
@@ -127,22 +132,6 @@ const STOPWORDS = new Set([
   'for', 'your', 'own', 'how', 'with', 'from', 'using', 'build', 'write',
   'simple', 'part',
 ])
-
-// Minúsculas e sem acentos, preservando "+", "#" e "." dentro de palavras para
-// não confundir "c++" ou "c#" com "c".
-export function normalize(text) {
-  return text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-}
-
-export function tokenize(text) {
-  return normalize(text)
-    .split(/[^a-z0-9+#.]+/)
-    .map(t => t.replace(/^\.+|\.+$/g, ''))
-    .filter(Boolean)
-}
 
 // Índice pré-calculado dos títulos para não re-tokenizar em cada pesquisa.
 const titleTokenCache = new WeakMap()
