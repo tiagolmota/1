@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "openviking": {
+      "source": {
+        "source": "url",
+        "url": "https://raw.githubusercontent.com/volcengine/OpenViking/main/.claude-plugin/marketplace.json"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "openviking-memory@openviking": true
+  }
+}
