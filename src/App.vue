@@ -1,6 +1,9 @@
 <script setup>
 import { ref, onMounted, nextTick } from 'vue'
 import { CreateMLCEngine } from '@mlc-ai/web-llm'
+import ProjectExplorer from './components/ProjectExplorer.vue'
+import byoxCatalog from './data/byox-catalog.json'
+import { findTutorials, buildContext, missingLanguages } from './knowledge/byox.js'
 
 const messages = ref([])
 const inputMessage = ref('')
@@ -8,6 +11,7 @@ const isLoading = ref(false)
 const isModelLoaded = ref(false)
 const progress = ref('')
 const messagesContainer = ref(null)
+const showExplorer = ref(false)
 let engine = null
 
 const systemPrompt = "Você é um professor particular de Inteligência Artificial para alunos do ensino médio. Seu objetivo é ajudar os alunos a aprender de forma fácil e clara. Responda sempre em português. Seja amigável, encorajador, use exemplos simples e seja sempre ético."
@@ -50,14 +54,22 @@ const sendMessage = async () => {
   if (!inputMessage.value.trim() || !isModelLoaded.value || isLoading.value) return
 
   const userText = inputMessage.value.trim()
+  // Procura tutoriais do catálogo build-your-own-x antes de chamar o modelo.
+  // O modelo recebe só títulos (sem links) e a interface mostra os links
+  // verdadeiros, para que nenhum URL apresentado ao aluno seja inventado.
+  const tutorials = findTutorials(byoxCatalog, userText)
+  const knowledge = buildContext(tutorials, userText)
   messages.value.push({ role: 'user', content: userText })
   inputMessage.value = ''
   isLoading.value = true
   await scrollToBottom()
 
   try {
+    // O contexto vai no próprio prompt de sistema porque o WebLLM só aceita
+    // uma mensagem de sistema, e tem de ser a primeira. É recalculado a cada
+    // pergunta para não arrastar referências de temas anteriores.
     const chatHistory = [
-      { role: "system", content: systemPrompt },
+      { role: "system", content: knowledge ? `${systemPrompt}\n\n${knowledge}` : systemPrompt },
       ...messages.value.map(msg => ({ role: msg.role, content: msg.content }))
     ]
 
@@ -65,7 +77,14 @@ const sendMessage = async () => {
       messages: chatHistory,
     })
 
-    messages.value.push({ role: 'assistant', content: reply.choices[0].message.content })
+    messages.value.push({
+      role: 'assistant',
+      content: reply.choices[0].message.content,
+      // Guardados na mensagem (e não enviados ao modelo, ver o map acima)
+      // para que cada resposta mostre os tutoriais que a fundamentaram.
+      tutorials,
+      missing: missingLanguages(tutorials, userText),
+    })
     await scrollToBottom()
   } catch (error) {
     console.error('Error during generation:', error)
@@ -74,6 +93,15 @@ const sendMessage = async () => {
   } finally {
     isLoading.value = false
   }
+}
+
+// Pergunta vinda do explorador de projetos. Se o modelo ainda não estiver
+// carregado, a pergunta fica escrita na caixa de texto para ser enviada
+// depois, em vez de se perder.
+const askFromExplorer = async (text) => {
+  showExplorer.value = false
+  inputMessage.value = text
+  if (isModelLoaded.value) await sendMessage()
 }
 </script>
 
@@ -94,14 +122,23 @@ const sendMessage = async () => {
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
           Super Seguro
         </span>
+        <button
+          @click="showExplorer = !showExplorer"
+          class="px-4 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-full shadow-sm flex items-center gap-1 transition-colors"
+        >
+          🛠️ {{ showExplorer ? 'Voltar ao chat' : 'Ideias de projetos' }}
+        </button>
       </div>
     </header>
 
     <!-- Main App Area -->
     <main class="w-full max-w-3xl bg-white rounded-3xl shadow-2xl border border-indigo-100 overflow-hidden flex flex-col h-[70vh] min-h-[500px]">
 
+      <!-- Project Explorer (catálogo build-your-own-x) -->
+      <ProjectExplorer v-if="showExplorer" @ask="askFromExplorer" />
+
       <!-- Welcome / Load Screen -->
-      <div v-if="!isModelLoaded" class="flex-1 flex flex-col items-center justify-center p-8 text-center bg-gradient-to-b from-white to-indigo-50">
+      <div v-else-if="!isModelLoaded" class="flex-1 flex flex-col items-center justify-center p-8 text-center bg-gradient-to-b from-white to-indigo-50">
         <div class="w-24 h-24 bg-indigo-100 rounded-full flex items-center justify-center mb-6 text-4xl shadow-inner">
           🤖
         </div>
@@ -146,6 +183,20 @@ const sendMessage = async () => {
                      ? 'bg-indigo-600 text-white rounded-br-sm'
                      : 'bg-white border border-slate-200 text-slate-800 rounded-bl-sm'">
                 <p class="whitespace-pre-wrap">{{ msg.content }}</p>
+
+                <!-- Tutoriais do catálogo usados nesta resposta; os links vêm do JSON, nunca do modelo -->
+                <div v-if="msg.tutorials?.length" class="mt-4 pt-3 border-t border-slate-100 space-y-2">
+                  <p class="text-xs font-semibold text-slate-500">Tutoriais para construir do zero:</p>
+                  <a v-for="(t, i) in msg.tutorials" :key="t.url" :href="t.url" target="_blank" rel="noopener noreferrer"
+                     class="block px-3 py-2 bg-indigo-50 hover:bg-indigo-100 rounded-xl text-sm transition-colors">
+                    <span class="font-medium text-indigo-900">{{ i + 1 }}. {{ t.title }}</span>
+                    <span class="block text-xs text-indigo-600">{{ t.languages.join(' · ') }}<template v-if="t.format !== 'text'"> · {{ t.format === 'video' ? 'vídeo' : t.format.toUpperCase() }}</template></span>
+                  </a>
+                  <p v-if="msg.missing?.length" class="text-xs text-amber-700">
+                    Não há tutoriais deste tema em {{ msg.missing.join(', ') }} no catálogo; estes são noutras linguagens.
+                  </p>
+                  <p class="text-[11px] text-slate-400">Fonte: build-your-own-x (links externos, em inglês).</p>
+                </div>
               </div>
             </div>
 
