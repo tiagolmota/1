@@ -56,3 +56,19 @@ cp /tmp/ars/LICENSE .claude/skills/LICENSE-academic-research-skills
 ```
 
 Atualiza depois o commit e a versão indicados no topo deste ficheiro.
+
+## humanizer (skill adicional)
+
+`humanizer/` é uma cópia **sem alterações** de `skills/humanizer` do repositório
+[Aboudjem/humanizer-skill](https://github.com/Aboudjem/humanizer-skill)
+(Adam Boudjemaa), commit `a58df065367550b6ce40ff3f648335018d8e0589`, licença MIT
+(texto em `humanizer/LICENSE`, obrigatório pela própria licença). Deteta 55
+padrões de escrita típica de IA e reescreve o texto segundo um perfil de voz;
+a própria skill proíbe inventar factos, nomes, datas, números ou citações.
+
+Uso recomendado em texto académico: como **último passo**, depois da
+verificação de integridade da ARS, só para estilo (`--voice professional
+--purpose essay`, sem `--aggressive`), sem tocar em citações, dados nem na
+declaração de uso de IA. Os padrões estão escritos para inglês e chinês; em
+português deteta menos. Ficaram de fora o CLI em Node.js, o site e os ficheiros
+de promoção do repositório original.
